@@ -1,5 +1,5 @@
 import { wrapService } from '@typeswarm/cli';
-import { publishPort, unpublishPort, setImageTag } from './Utils';
+import { publishPort, unpublishPort, setImageTag } from '..';
 
 describe('Utils', () => {
     describe('publishPort', () => {

@@ -1,10 +1,10 @@
-import immer from 'immer';
+import { DefinitionsService } from '@typeswarm/cli';
 import {
-    StrictService,
     parseService,
     StrictPortMapping,
+    StrictService,
 } from '@typeswarm/cli/lib/normalize';
-import { DefinitionsService } from '@typeswarm/cli';
+import immer from 'immer';
 
 export const publishPort = (portMapping: StrictPortMapping) => (
     service: DefinitionsService
@@ -40,33 +40,5 @@ export const publishPort = (portMapping: StrictPortMapping) => (
         }
 
         service.ports.push(portMapping);
-    });
-};
-
-export const unpublishPort = (target: number) => (
-    service: DefinitionsService
-): StrictService => {
-    return immer(parseService(service), (service: StrictService) => {
-        service.ports = (service.ports ?? []).filter(
-            (port) => port.target !== target
-        );
-    });
-};
-
-export const setImageTag = (options: { image?: string; tag?: string }) => (
-    service: DefinitionsService
-): StrictService => {
-    return immer(parseService(service), (service: StrictService) => {
-        const [image, tag] = (service.image ?? '').split(':', 2);
-        const imageTag = { image, tag, ...options };
-        if (!imageTag.image) {
-            throw new Error(
-                `Image is missing. Service: ${JSON.stringify(service)}`
-            );
-        }
-        service.image = imageTag.image;
-        if (imageTag.tag) {
-            service.image = service.image + ':' + imageTag.tag;
-        }
     });
 };
